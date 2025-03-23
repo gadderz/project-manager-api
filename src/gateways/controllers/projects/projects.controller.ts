@@ -1,8 +1,12 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Req, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Body, Controller, Get, Inject,
+  NotFoundException, Param, Post, Req, UnprocessableEntityException
+} from '@nestjs/common';
 import { CreateProjectService } from 'src/domain/use-cases/projects/create-project.service';
 import { GetAllProjectsService } from 'src/domain/use-cases/projects/get-all-projects.service';
 import { GetProjectByIdService } from 'src/domain/use-cases/projects/get-project-by-id.service';
 import { CreateProjectDto } from './dtos/create-project.dto';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 
 const userId = 1;
 @Controller('projects')
@@ -11,6 +15,7 @@ export class ProjectsController {
     private readonly getAllProjectsUseCase: GetAllProjectsService,
     private readonly getProjectByIdUseCase: GetProjectByIdService,
     private readonly createProjectUseCase: CreateProjectService,
+    @Inject(CACHE_MANAGER) private cacheService: Cache,
   ) { }
 
   @Get()
@@ -18,7 +23,20 @@ export class ProjectsController {
     try {
       const loggedUser = request.user;
 
-      return await this.getAllProjectsUseCase.execute(loggedUser.sub);
+      const cachedData = await this.cacheService.get<{ name: string }>(
+        `user-${loggedUser.sub}/all-projects`,
+      );
+
+      console.log(cachedData);
+      if (cachedData) {
+        console.log(`Getting data from cache!`);
+        return cachedData;
+      }
+
+      const data = await this.getAllProjectsUseCase.execute(loggedUser.sub);
+      await this.cacheService.set(`user-${loggedUser.sub}/all-projects`, data);
+      return data;
+
     } catch (error) {
       throw new NotFoundException(error.message);
     }
@@ -37,7 +55,7 @@ export class ProjectsController {
       throw new NotFoundException(error.message);
     }
   }
-  
+
   @Post()
   async create(@Req() request, @Body() createProjectDto: CreateProjectDto) {
     try {
