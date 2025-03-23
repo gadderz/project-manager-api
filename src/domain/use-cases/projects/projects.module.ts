@@ -2,8 +2,11 @@ import { Module } from '@nestjs/common';
 import { CreateProjectService } from './create-project.service';
 import { GetProjectByIdService } from './get-project-by-id.service';
 import { GetAllProjectsService } from './get-all-projects.service';
+import { DatabaseModule } from 'src/infrastructure/database/database.module';
 
 @Module({
-  providers: [CreateProjectService, GetProjectByIdService, GetAllProjectsService]
+  imports: [DatabaseModule],
+  providers: [CreateProjectService, GetProjectByIdService, GetAllProjectsService],
+  exports: [CreateProjectService, GetAllProjectsService, GetProjectByIdService],
 })
 export class ProjectsModule {}
