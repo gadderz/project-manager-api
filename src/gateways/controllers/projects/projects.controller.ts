@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, UnprocessableEntityException } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Post, Req, UnprocessableEntityException } from '@nestjs/common';
 import { CreateProjectService } from 'src/domain/use-cases/projects/create-project.service';
 import { GetAllProjectsService } from 'src/domain/use-cases/projects/get-all-projects.service';
 import { GetProjectByIdService } from 'src/domain/use-cases/projects/get-project-by-id.service';
@@ -14,19 +14,23 @@ export class ProjectsController {
   ) { }
 
   @Get()
-  async findAll() {
+  async findAll(@Req() request) {
     try {
-      return await this.getAllProjectsUseCase.execute(userId);
+      const loggedUser = request.user;
+
+      return await this.getAllProjectsUseCase.execute(loggedUser.sub);
     } catch (error) {
       throw new NotFoundException(error.message);
     }
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number) {
+  async findOne(@Req() request, @Param('id') id: number) {
     try {
+      const loggedUser = request.user;
+
       return await this.getProjectByIdUseCase.execute({
-        userId,
+        userId: loggedUser.sub,
         projectId: id,
       });
     } catch (error) {
@@ -35,10 +39,12 @@ export class ProjectsController {
   }
   
   @Post()
-  async create(@Body() createProjectDto: CreateProjectDto) {
+  async create(@Req() request, @Body() createProjectDto: CreateProjectDto) {
     try {
+      const loggedUser = request.user;
+
       return await this.createProjectUseCase.execute({
-        userId,
+        userId: loggedUser.sub,
         project: createProjectDto,
       });
     } catch (error) {
