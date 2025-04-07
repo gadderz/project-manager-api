@@ -4,7 +4,6 @@ import { ProjectEntity } from './project.entity';
 import { TaskEntity } from '../../../../../tasks/src/infrastructure/entities/task.entity';
 import { IProject } from '@project-manager-api/domain/interfaces/project.interface';
 import { ITask } from 'apps/tasks/src/domain/interfaces/task.interface';
-// import { ITask } from '@project-manager-api/domain/interfaces/task.interface';
 
 @Entity('user')
 export class UserEntity implements IUser {

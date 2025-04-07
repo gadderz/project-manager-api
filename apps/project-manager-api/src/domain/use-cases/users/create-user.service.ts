@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { BaseUseCase } from '../base-use-case';
 import { UsersRepositoryService } from '@project-manager-api/infrastructure/database/repositories/users.repository.service';
 import { CreateUserDto } from '@project-manager-api/gateways/controllers/users/dtos/create-user.dto';
 import { IUser } from '@project-manager-api/domain/interfaces/user.interface';
 import { hash } from 'bcrypt';
+import { BaseUseCase } from '@app/common/interfaces/base-use-case';
 
 @Injectable()
 export class CreateUserService implements BaseUseCase {

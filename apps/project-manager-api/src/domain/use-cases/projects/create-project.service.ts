@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateProjectDto } from '@project-manager-api/gateways/controllers/projects/dtos/create-project.dto';
 import { ProjectsRepositoryService } from '@project-manager-api/infrastructure/database/repositories/projects.repository.service';
 import { UsersRepositoryService } from '@project-manager-api/infrastructure/database/repositories/users.repository.service';
-import { BaseUseCase } from '../base-use-case';
 import { IProject } from '@project-manager-api/domain/interfaces/project.interface';
+import { BaseUseCase } from '@app/common/interfaces/base-use-case';
 
 @Injectable()
 export class CreateProjectService implements BaseUseCase {

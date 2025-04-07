@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { BaseUseCase } from '../../../../project-manager-api/src/domain/use-cases/base-use-case';
 import { ITask } from '../interfaces/task.interface';
 import { CreateTaskDto } from '../../gateways/controllers/dtos/create-task.dto';
 import { TasksRepositoryService } from '../../infrastructure/database/tasks.repository.service';
+import { BaseUseCase } from '@app/common/interfaces/base-use-case';
 
 @Injectable()
 export class CreateTaskService implements BaseUseCase {

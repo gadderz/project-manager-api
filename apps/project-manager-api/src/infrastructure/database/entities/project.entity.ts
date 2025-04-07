@@ -1,5 +1,4 @@
 import { IProject } from '@project-manager-api/domain/interfaces/project.interface';
-// import { ITask } from '@project-manager-api/domain/interfaces/task.interface';
 import { IUser } from '@project-manager-api/domain/interfaces/user.interface';
 import {
   Column,

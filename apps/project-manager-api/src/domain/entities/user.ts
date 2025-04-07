@@ -1,6 +1,5 @@
 import { ITask } from "apps/tasks/src/domain/interfaces/task.interface";
 import { IProject } from "../interfaces/project.interface";
-// import { ITask } from "../interfaces/task.interface";
 import { IUser } from "../interfaces/user.interface";
 
 export class User implements IUser{

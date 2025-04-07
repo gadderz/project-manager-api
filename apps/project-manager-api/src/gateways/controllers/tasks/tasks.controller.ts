@@ -13,7 +13,7 @@ export class TasksController {
     try {
       const loggedUser = request.user;
 
-      console.log('Disparando mensagem para Tasks');
+      console.log('Disparando mensagem para Tasks - get_tasks');
 
       return this.redisClient.send(
         { cmd: 'get_tasks' },
@@ -21,6 +21,7 @@ export class TasksController {
       );
 
     } catch (error) {
+      console.log(error)
       throw new NotFoundException(error.message);
     }
   }
@@ -29,11 +30,11 @@ export class TasksController {
   async findOne(@Req() request, @Param('id') id: number) {
     try {
       const loggedUser = request.user;
-      console.log('Disparando mensagem para Tasks');
+      console.log('Disparando mensagem para Tasks - get_task_by_id');
 
       return this.redisClient.send(
         { cmd: 'get_task_by_id' },
-        { userId: loggedUser.sub },
+        { userId: loggedUser.sub, taskId: id },
       );
     } catch (error) {
       throw new NotFoundException(error.message);
@@ -44,13 +45,14 @@ export class TasksController {
   async create(@Req() request, @Body() createTaskDto: CreateTaskDto) {
     try {
       const loggedUser = request.user;
-      console.log('Disparando mensagem para Tasks');
+      console.log('Disparando mensagem para Tasks - create_task');
 
       return this.redisClient.send(
         { cmd: 'create_task' },
-        { userId: loggedUser.sub },
+        { userId: loggedUser.sub, task: createTaskDto },
       );
     } catch (error) {
+      console.log(error)
       throw new UnprocessableEntityException(error.message);
     }
   }
